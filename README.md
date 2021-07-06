@@ -12,5 +12,10 @@ Clone or download this repo. 💾
 npm install
 ```
 
+to run the test server
+```bash
+npm run dev
+```
+
 And you're good to go.
-Edit,modify,chance to your heart's content 💙
+Edit, modify, change to your heart's content 💙

@@ -17,28 +17,27 @@
     let email,password,err
 
     async function login() {
-        const response = await fetch("/auth/login", {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            cache: 'no-cache',
-            mode: 'same-origin'
-            },
-            body: JSON.stringify({
-                email,
-                password,
-                "_csrf": csrfToken
-            }),
-        });
-        const data = await response.json()// get response data
-        if(data.message) {
-            err = data.message
-        }else {
-            $session.user = data.user;// save user in sapper session
-            $session.loggedIn = data.loggedIn
-            goto('/')
-        }
+        const input = { email, password, "_csrf": csrfToken }
+        fetch('/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(input),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.message) {
+                    err = data.message
+                }else {
+                    $session.user = data.user //data.user;// save user in sapper session
+                    $session.loggedIn = data.loggedIn
+                    goto('/')
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     }
 </script>
 

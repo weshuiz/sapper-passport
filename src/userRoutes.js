@@ -17,7 +17,9 @@ function(req, res, next) {
 	  if (!user) { return res.json({message: 'invalid email or password'}); }// 404 user not found
 	  req.logIn(user, function(err) {// attempt login
 		if (err) { return next(err); }//login failed
-		return res.json({user: req.user, loggedIn: req.isAuthenticated()})// login successful
+		req.session.user = user
+		req.session.loggedIn = req.isAuthenticated()
+		return res.json({user: req.session.user, loggedIn: req.session.loggedIn})// login successful
 	  });
 	})(req, res, next);
 });

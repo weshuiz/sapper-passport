@@ -94,10 +94,28 @@ async function(req,res) {
 	})
 })
 
+userRoutes.get('/me', 
+function(req, res) {
+	if(req.isAuthenticated()) {
+		res.status(200).json({
+			user: req.user,
+			loggedIn: req.isAuthenticated()
+		})
+	}else {
+		res.status(200).json({
+			user: undefined,
+			loggedIn: req.isAuthenticated()
+		})
+	}
+})
+
 userRoutes.get('/logout', 
 function(req, res) {
-    req.logout();// unset user in passport
-    res.status(204).json()// 204 no content
+	if(req.isAuthenticated()) {
+		req.logout();// unset user in passport
+	}else {
+		res.redirect(301, '/');// 301 moved permanently
+	}
 })
 
 export { userRoutes }

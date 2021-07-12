@@ -28,7 +28,7 @@ export function authorize(req,res,next) {
 // verify if user has admin role
 export function isAdmin(req,res,next) {
 	if(req.isAuthenticated()) {// verify if user is authorized
-		const { user } = req.session// get user from session
+		const { user } = req// get user from session
 		if( hasAdmin(user) ) next()// user is admin
 		res.status(401).json({message: "Unauthorized"})// user was not authorized
 	}

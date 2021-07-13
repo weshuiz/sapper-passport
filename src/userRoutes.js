@@ -94,21 +94,6 @@ async function(req,res) {
 	})
 })
 
-userRoutes.get('/me', 
-function(req, res) {
-	if(req.isAuthenticated()) {
-		res.status(200).json({
-			user: req.user,
-			loggedIn: req.isAuthenticated()
-		})
-	}else {
-		res.status(200).json({
-			user: undefined,
-			loggedIn: req.isAuthenticated()
-		})
-	}
-})
-
 userRoutes.get('/logout', 
 function(req, res) {
 	if(req.isAuthenticated()) {

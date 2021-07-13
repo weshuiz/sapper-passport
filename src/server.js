@@ -37,20 +37,18 @@ passport.deserializeUser(function(id, done) {
 })
 
 app.use(
-	( req, res, next )=> {// wrap sapper to access the req
-		return sapper.middleware({
-			// svelte (front-end) has its own storage called 'session'
-			session: () => {// NOTE: this is not related to express-session
-				const token = dev ? "test": req.csrfToken()// set csrf token to test while dev is enabled
-				res.setHeader('cache-control', 'no-cache, no-store')// Note: disable caching to prevent data lost upon reload
-				return {// svelte session is frond-end ONLY
-					user: req.session.user,// used to display user info
-					csrfToken: token,// forms use this to load the CSRF token
-					loggedIn: req.session.loggedIn// whether user is logged in or not
-				}
-			}
-		}) (req, res, next)// idk why but this is required
-	}
+	session({// express-session config
+		secret: process.env.SESSION_SECRET,
+		resave: false,// allow overwrite unchanced sessions
+		saveUninitialized: false,// allow empty sessions to be saved
+		cookie: { secure: !dev }// secure can only run on https, disabled in dev
+	}),
+	passport.initialize(),
+	passport.session(),
+	express.json(),// replaces body-parser
+	cookieParser(),// pass cookies in requests
+	compression({ threshold: 0 }),
+	sirv('static', { dev }),
 )
 if(!dev) {
 	app.use(

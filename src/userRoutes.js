@@ -94,13 +94,14 @@ async function(req,res) {
 	})
 })
 
-userRoutes.get('/logout', 
+userRoutes.get('/logout',
 function(req, res) {
 	if(req.isAuthenticated()) {
 		req.logout();// unset user in passport
-	}else {
-		res.redirect(301, '/');// 301 moved permanently
+		req.session.user = undefined// logout user on the client
+		req.session.loggedIn = false// logout user on the client
 	}
+	res.status(204).json({})// 204 no content
 })
 
 export { userRoutes }

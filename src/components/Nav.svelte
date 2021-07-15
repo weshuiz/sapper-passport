@@ -8,11 +8,10 @@
 
 	function logout() {
 		fetch('/auth/logout')
-		.then(response => response.json())
-		.then(data => {
+		.then(_response => {
 			$session.user = undefined// logout user on the client
 			$session.loggedIn = false// logout user on the client
-		});
+		})
 	}
 </script>
 
